@@ -1,4 +1,6 @@
 const grid = document.querySelector('.grid');
+const spanPlayer = document.querySelector('.player');
+const timer = document.querySelector('.timer');
 
 const characters = [
     'adesivo lâmpada acesa',
@@ -22,11 +24,14 @@ const createElement = (tag, className) => {
 
 let firstCard = '';
 let secondCard = '';
-const checkEndGame = () => {
-    const disabledCads = document.querySelectorAll('.disabled-card');
 
-    if (disabledCads.length === 20) {
-        alert('Parabéns, você conseguiu!');
+
+const checkEndGame = () => {
+    const disabledCards = document.querySelectorAll('.disabled-card');
+    
+    if (disabledCards.length === 20) {
+    clearInterval(this.loop);
+    alert(`Parabéns, ${spanPlayer.innerHTML}! Seu tempo foi de: ${timer.innerHTML}`);
     }
 }
 
@@ -98,20 +103,27 @@ const createCard = (character) => {
 }
 
 const loadGame = () => {
-
-    // Função para carregar o jogo
-    grid.innerHTML = '';
-    
-    const duplicateCharacters = [ ...characters, ...characters];
-    
+    const duplicateCharacters = [...characters, ...characters];
+  
     const shuffledArray = duplicateCharacters.sort(() => Math.random() - 0.5);
-
+  
     shuffledArray.forEach((character) => {
-        //  Passando o personagem para afução createCard
-        const card = createCard(character);
-        grid.appendChild(card);
-     });
-     
-}
+      const card = createCard(character);
+      grid.appendChild(card);
+    });
+  }
 
-loadGame();
+const startTimer = () => {
+
+    this.loop = setInterval(() => {
+      const currentTime = +timer.innerHTML;
+      timer.innerHTML = currentTime + 1;
+    }, 1000);
+  
+  }
+
+window.onload = () => {
+    spanPlayer.innerHTML = localStorage.getItem('player');
+    startTimer();
+    loadGame();
+}
